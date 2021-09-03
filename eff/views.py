@@ -5,6 +5,8 @@ from django.http.response import HttpResponse, HttpResponseBase, HttpResponseRed
 from django.shortcuts import render
 from django import forms
 
+import json
+
 
 class UploadInfoActivosForm(forms.Form):
     excel = forms.FileField()
@@ -22,12 +24,15 @@ def upload(request):
             for m in InfoActivosModel.objects.all():
                 ids.append(m.id_mercado)
 
+            to_rentabilidades = json.dumps(mercado.rentabilidades)
+            to_mat_covs = json.dumps(mercado.mat_covarianzas.tolist())
+
             if str(mercado) not in ids:
-                InfoActivosModel(id_mercado=str(mercado), rentabilidades={}, volatilidades={}).save()
+                InfoActivosModel(id_mercado=str(mercado), rentabilidades=to_rentabilidades, mat_covarianzas=to_mat_covs).save()
             else:
                 entry = InfoActivosModel.objects.get(id_mercado=str(mercado))
-                entry.rentabilidades = {}
-                entry.volatilidades = {}
+                entry.rentabilidades = to_rentabilidades
+                entry.mat_covarianzas = to_mat_covs
                 entry.save()
             
             return HttpResponseRedirect("display", request)

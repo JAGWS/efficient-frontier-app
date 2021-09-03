@@ -4,10 +4,24 @@ import numpy as np
 import io
 
 
+
+"""
+En este archivo es donde pretendía ejecutar toda la lógica matemática relacionada directamente con los cálculos de la 
+generación de carteras, su filtrado y la generación de la frontera eficiente.
+
+Aparte de funciones para calcular la rentabilidad, la volatilidad y el ratio de Sharpe de una cartera, contiene la clase 
+'Mercado'. La clase Mercado es una representación que tiene como parámetros de clase los nombres de los activos, sus 
+rentabilidades y la matriz de covarianzas. Es una clase puente entre el modelo, la vista y la toma de datos.
+
+Este archivo está incompleto, habría que completar el resto de la lógica que ya está implementada en el Jupyter Notebook.
+
+"""
 class Mercado():
     def __init__(self, archivo) -> None:
         excel = io.BytesIO(archivo)
 
+        # Dado el diseño actual de la aplicación es muy importante respetar el formato del Excel introducido para que se 
+        # cargue todo correctamente. 
         datos_esperados = pd.read_excel(excel, sheet_name="Datos esperados")
         datos_esperados = datos_esperados.rename({datos_esperados.columns[0]:'Datos'}, axis=1).set_index('Datos')
         self.nombres = datos_esperados.columns.tolist()
@@ -39,6 +53,7 @@ class Mercado():
         return strr 
     
 
+    # Función para la generación de pesos
     def get_pesos_distr(self):
         n_activos = len(self.nombres)
         st = self.__get_step(n_activos)
