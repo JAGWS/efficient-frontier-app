@@ -2,5 +2,6 @@ from django.db import models
 
 # Create your models here.
 class InfoActivosModel(models.Model):
-    title = models.CharField(max_length=50)
-    excel = models.FileField()
+    id_mercado = models.TextField()
+    rentabilidades = models.JSONField()
+    volatilidades = models.JSONField()

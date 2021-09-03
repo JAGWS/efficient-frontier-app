@@ -2,9 +2,10 @@ from django.http.response import HttpResponse, HttpResponseBase, HttpResponseRed
 from django.shortcuts import render
 from django import forms
 
+from . import auxiliar
+
 
 class UploadInfoActivosForm(forms.Form):
-    title = forms.CharField(max_length=50)
     excel = forms.FileField()
 
 
@@ -14,7 +15,7 @@ def upload(request):
         form = UploadInfoActivosForm(request.POST, request.FILES)
 
         if form.is_valid():
-            # Process excel --> save data to model --> show filters and rest of elements
+            mercado = auxiliar.Mercado(request.FILES["excel"].read())
 
             return HttpResponseRedirect("display", request)
         else:
