@@ -8,20 +8,22 @@ from django import forms
 import json
 
 
+# Clase con el Form para subir el archivo
 class UploadInfoActivosForm(forms.Form):
     excel = forms.FileField()
 
 
-# Create your views here.
+# View de entrada. Se pide un archivo. Se sube el archivo, se genera la clase Mercado, se actualiza el modelo y
+# se redirige al usuario a la página de display, dónde en el futuro estarán el resto de cosas
 def upload(request):
     if request.method == "POST":
-        form = UploadInfoActivosForm(request.POST, request.FILES)
+        form = UploadInfoActivosForm(request.POST, request.FILES) # Recuperación del formulario
 
         if form.is_valid():
             mercado = auxiliar.Mercado(request.FILES["excel"].read())
 
             ids = []
-            for m in InfoActivosModel.objects.all():
+            for m in InfoActivosModel.objects.all(): # Comprobamos si hay alguno con los mismos activos y guardamos.
                 ids.append(m.id_mercado)
 
             to_rentabilidades = json.dumps(mercado.rentabilidades)
