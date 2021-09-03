@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>WS Efficient Frontier Calculation</title>
+        <link rel="stylesheet" href="{% static 'eff/styles.css' %}">
+    </head>
+
+    <body>
+        <div id="main_header">
+            <h1 class="main_heading">Efficient Frontier Web App</h1>
+        </div>
+
+        <div id="upload_excel">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit">
+            </form>
+        </div>
+
+        <hr>
+    </body>
+</html>

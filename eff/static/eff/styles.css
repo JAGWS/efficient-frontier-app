@@ -1,4 +1,17 @@
-#main_heading {
+.main_heading {
     font-family: sans-serif;
-    color: blue;
+    font-style: italic;
+}
+
+hr {
+    margin-top: 20px;
+}
+
+#filters {
+    visibility: hidden;
+    margin-top: 30px;
+}
+
+#filters input {
+    margin: 20px
 }
