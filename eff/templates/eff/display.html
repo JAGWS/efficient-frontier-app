@@ -8,5 +8,11 @@
     </head>
     <body>
         <h1 class="main_heading">On to display things...</h1>
+
+        <ul>
+            {% for m in mercados %}
+            <li>{{m}}</li>
+            {% endfor %}
+        </ul>
     </body>
 </html>

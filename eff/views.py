@@ -1,8 +1,9 @@
+from eff.models import InfoActivosModel
+from eff import auxiliar
+
 from django.http.response import HttpResponse, HttpResponseBase, HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
-
-from . import auxiliar
 
 
 class UploadInfoActivosForm(forms.Form):
@@ -17,6 +18,18 @@ def upload(request):
         if form.is_valid():
             mercado = auxiliar.Mercado(request.FILES["excel"].read())
 
+            ids = []
+            for m in InfoActivosModel.objects.all():
+                ids.append(m.id_mercado)
+
+            if str(mercado) not in ids:
+                InfoActivosModel(id_mercado=str(mercado), rentabilidades={}, volatilidades={}).save()
+            else:
+                entry = InfoActivosModel.objects.get(id_mercado=str(mercado))
+                entry.rentabilidades = {}
+                entry.volatilidades = {}
+                entry.save()
+            
             return HttpResponseRedirect("display", request)
         else:
             return render(request, "eff/upload.html", context={ 
@@ -29,4 +42,11 @@ def upload(request):
 
 
 def display(request):
-    return render(request, "eff/display.html")
+    mercados = []
+
+    for e in InfoActivosModel.objects.all():
+        mercados.append(e.id_mercado)
+
+    return render(request, "eff/display.html", context={
+        "mercados": mercados
+    })
